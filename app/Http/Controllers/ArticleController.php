@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redis;
 
 class ArticleController extends Controller
 {
@@ -16,5 +17,21 @@ class ArticleController extends Controller
     {
         $article = Article::find($id);
         return view('articles.show', ['article' => $article]);
+    }
+    public function create()
+    {
+        return view('articles.create');
+    }
+    public function store(Request $request)
+    {
+        //インスタンスの作成
+        $article = new Article;
+
+        $article->title = $request->title;
+        $article->body = $request->body;
+
+        $article->save();
+
+        return redirect(route('articles.index'));
     }
 }
